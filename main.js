@@ -1,5 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
         apiKey: "AIzaSyCRTmTgOyCnhUVZyhuN4caZ27RcziJp4tY",
@@ -11,21 +17,77 @@ const firebaseConfig = {
         measurementId: "G-JF5TRNKBZ9"
     };
 
+const auth = getAuth(app);
+
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 const messagesDiv = document.getElementById("messages");
 const input = document.getElementById("messageInput");
-const button = document.getElementById("sendButton");
+const sendButton = document.getElementById("sendButton");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const usernameInput = document.getElementById("username");
+const signupBtn = document.getElementById("signup");
+const loginBtn = document.getElementById("login");
 
 const messagesRef = ref(database, "messages");
 
 const username = "User" + Math.floor(Math.random() * 10000)
 
-button.addEventListener("click", sendMessage);
+sendButton.addEventListener("click", sendMessage);
 input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") sendMessage();
 });
+
+signupBtn.addEventListener("click", async () => {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    const username = usernameInput.value;
+
+    if (!email || !password || !username) return;
+
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    const user = result.user;
+
+    await set(ref(database, `users/${user.uid}`), {
+        username,
+        servers: {
+            general: true
+        }
+    });
+});
+
+loginBtn.addEventListener("click", async () => {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    if (!email || !password) return;
+
+    await signInWithEmailAndPassword(auth, email, password);
+});
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        console.log("Not logged in");
+        return;
+    }
+
+    console.log("Logged in as: ", user.uid);
+
+    const snapshot = await get(ref(database, `users/${user.uid}`));
+    const profile = snapshot.val();
+
+    username = profile.username;
+    userServers = profile.servers;
+});
+
+push(messagesRef, {
+    userId: auth.currentUser.uid,
+    username,
+    text,
+    timestamp: Date.now()
+})
 
 function sendMessage() {
     const text = input.value.trim();
