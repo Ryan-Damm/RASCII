@@ -23,7 +23,7 @@ function sendMessage() {
 function addMessage(user, text) {
     const message = document.createElement("div");
     message.className = "message"
-    message.textContent = '${user}: ${text}';
+    message.textContent = `${user}: ${text}`;
     messagesDiv.appendChild(message);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
