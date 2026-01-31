@@ -1,8 +1,22 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+        apiKey: "AIzaSyCRTmTgOyCnhUVZyhuN4caZ27RcziJp4tY",
+        authDomain: "rascii-b4c2a.firebaseapp.com",
+        projectId: "rascii-b4c2a",
+        storageBucket: "rascii-b4c2a.firebasestorage.app",
+        messagingSenderId: "7535372273",
+        appId: "1:7535372273:web:cf9da87859cde81bab4650",
+        measurementId: "G-JF5TRNKBZ9"
+    };
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
 const messagesDiv = document.getElementById("messages");
 const input = document.getElementById("messageInput");
 const button = document.getElementById("sendButton");
-
-const { database, ref, push, onChildAdded } = window.firebaseDB;
 
 const messagesRef = ref(database, "messages");
 
