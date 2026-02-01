@@ -17,10 +17,12 @@ const firebaseConfig = {
         measurementId: "G-JF5TRNKBZ9"
     };
 
-const auth = getAuth(app);
+
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+
+const auth = getAuth(app);
 
 const messagesDiv = document.getElementById("messages");
 const input = document.getElementById("messageInput");
