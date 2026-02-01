@@ -10,6 +10,7 @@ import {
 const firebaseConfig = {
         apiKey: "AIzaSyCRTmTgOyCnhUVZyhuN4caZ27RcziJp4tY",
         authDomain: "rascii-b4c2a.firebaseapp.com",
+        databaseURL: "https://rascii-b4c2a-default-rtdb.firebaseio.com/",
         projectId: "rascii-b4c2a",
         storageBucket: "rascii-b4c2a.firebasestorage.app",
         messagingSenderId: "7535372273",
